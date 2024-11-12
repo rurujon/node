@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채팅 클라이언트 - 3</title>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/4.7.4/socket.io.js"></script>
+
+    <script type="text/javascript">
+
+        var host
+        var port
+        var socket
+        
+        $(function(){
+
+            $('#connectBtn').bind('click',function(event){
+                
+                host = $('#host').val()
+                port = $('#port').val()
+
+                connectToServer()
+            })
+
+            //1.메세지를 보내는 코딩(emit 메서드)
+            $('#sendBtn').bind('click',function(event){
+
+            var sender = $('#senderId').val()
+            var receiver = $('#receiverId').val()
+            var msg = $('#msg').val()
+
+            //message이벤트 객체 포멧은 사용자 정의
+            //sender : 보내는사람 아이디
+            //receiver : 받는사람 아이디
+            //command : 데이터의 종류를 구별(채팅글자외 다른기능)
+            //type : 전송될 데이터의 형태
+            //data : 데이터
+
+            var output = {sender:sender,receiver:receiver,
+                command:'chat',type:'text',data:msg
+            }
+
+            if(socket==undefined){
+
+                alert('서버에 연결되어 있지 않습니다. 서버에 연결하세요.')
+                return
+            }
+
+            //메세지 전송
+            socket.emit('message',output)
+
+            })
+
+            $('#loginBtn').bind('click',function(event){
+
+                var id = $('#id').val()
+                var pwd = $('#pwd').val()
+                var alias = $('#alias').val()
+                var today = $('#today').val()
+
+                $('#senderId').val(id)
+
+                var output = {id:id,pwd:pwd,alias:alias,today:today}
+
+                if(socket==undefined){
+                    alert('서버에 연결되어 있지 않습니다.')
+                    return
+                }
+
+                socket.emit('login',output)
+
+            })
+
+            $('#logoutBtn').bind('click',function(event){
+
+                if(socket==undefined){
+                    alert('서버에 연결되어 있지 않습니다.')
+                    return
+                }
+
+                var id = $('#id').val()
+
+                var output = {id:id}
+
+                socket.emit('logout',output)
+
+                $('#id').val('')
+                $('#pwd').val('')
+                $('#alias').val('')
+                $('#today').val('')
+
+                $('#senderId').val('')
+                
+            })
+
+
+        })
+
+        
+
+        function connectToServer(){
+
+            host = $('#host').val()
+            port = $('#port').val()
+
+            var options ={'forceNew':true} //연결 세션 만들기
+            var url = 'http://' + host + ':' + port
+
+            socket = io.connect(url,options)
+
+            socket.on('connect',function(){
+                printMsg('웹 소켓 서버가 연결되었습니다.' + url)
+
+                //3. 서버에서 온 데이터 받음
+                socket.on('message',function(message){
+                    printMsg('수신 메세지 : ' + message.sender + ', ' + 
+                        message.receiver + ', ' + message.command + ', ' + 
+                        message.data
+                    )
+                })
+
+                socket.on('response',function(response){
+
+                    printMsg('응답 메세지 : ' + response.command + ', ' + 
+                        response.code + ', ' + response.message
+                    )
+
+                    if(response.code==444){
+                        socket.close()
+                    }
+                })
+            })
+
+            socket.on('disconnect',function(){
+                printMsg('웹 소켓 서버가 종료되었습니다.' + url)
+            })
+
+        }
+
+        function printMsg(msg){
+            $('#result').append('<p>' + msg + '</p>')
+        }
+
+    </script>
+</head>
+<body onload="connectToServer()">
+
+    <h3>채팅 클라이언트 - 3 : 일대일 테스트</h3>
+    <br/>
+    <div>
+        <input type="text" id="host" value="192.168.16.24"/>
+        <input type="text" id="port" value="3000"/>
+        <input type="button" id="connectBtn" value="연결하기"/>
+    </div>
+
+    <br/>
+
+    <div>
+        아이디 : <input type="text" id="id"/><br/>
+        패스워드 : <input type="password" id="pwd"/><br/>
+        별명 : <input type="text" id="alias"/><br/>
+        상태 : <input type="text" id="today"/><br/>
+        <input type="button" id="loginBtn" value="로그인"/>
+        <input type="button" id="logoutBtn" value="로그아웃"/>
+    </div>
+    <br/>
+
+
+    <div>
+        <div>
+            <span>보내는 사람 아이디 : </span>
+            <input type="text" id="senderId"/>
+        </div>
+        <div>
+            <span>받는 사람 아이디 : </span>
+            <input type="text" id="receiverId" value="ALL"/>
+        </div>
+        <div>
+            <span>메세지 데이터 : </span>
+            <input type="text" id="msg"/>
+        </div>
+        <br/>
+        <input type="button" id="sendBtn" value="전송"/>
+    </div>
+
+    <hr/>
+    <p>결과 : </p>
+    <div id="result"></div>
+    
+</body>
+</html>

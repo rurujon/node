@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 컴퓨터든 휴대폰이든 가로길이에 맞춰서 해주는 게 viewport -->
+    <title>에러 페이지</title>
+
+    <link rel="stylesheet" type="text/css" href="../public/data/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="../public/data/login.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="../public/data/semantic.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div id="cardbox" class="ui blue fluid card">
+            <div class="content">
+                <div class="left floated author">
+                    <img id="iconImage" class="ui avater image"
+                    src="../public/image/404.png"/>
+                </div>
+                <div>
+                    <div id="titleText" class="header">
+                        에러
+                    </div>
+                    <div id="contentsText" class="description">
+                        요청하신 문서를 찾을 수 없습니다.
+                    </div>
+                </div>
+            </div>
+            <form action="/login" method="get" id="myForm">
+                <table>
+                    <tr class="row" align="center" vallign="middle">
+                        <td id="buttonContainer">
+                            <input type="submit" value="확인" class="ui primary button" id="submitButton"/>
+                        </td> 
+                    </tr>
+                </table>
+            </form>
+        </div>
+    </div>
+    
+</body>
+</html>

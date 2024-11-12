@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- 컴퓨터든 휴대폰이든 가로길이에 맞춰서 해주는 게 viewport -->
+    <title>파일 업로드</title>
+    <script>
+        var count = 1;
+        function addItem(){
+            if(count<=5){
+
+                var newItemE = document.createElement('div')
+
+                var html = "파일 : <input type=\"file\" name=\"upload\"/><br/>"
+
+                newItemE.innerHTML = html
+
+                var itemListDiv = document.getElementById('itemList')
+
+                itemListDiv.appendChild(newItemE)
+
+            }else{
+                alert('파일의 갯수는 5개까지입니다.')
+            }
+            count++
+        }
+
+
+
+    </script>
+</head>
+<body>
+    <h1>파일 업로드</h1>
+    <br/>
+    <form method="post" action="/process/file" enctype="multipart/form-data">
+        <table>
+            <tr>
+                <input type="button" value="파일추가" onclick="addItem()"/>
+                <div id="itemList"></div>
+            </tr>
+        </table>
+        <input type="submit" value="업로드"/>
+    </form>
+
+    
+</body>
+</html>

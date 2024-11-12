@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>사용자 리스트 목록</title>
+
+    <link rel="stylesheet" type="text/css" href="../public1/data/semantic.min.css">
+    <link rel="stylesheet" type="text/css" href="../public1//data/listUserResp.css">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script src="../public1/data/semantic.min.js"></script>
+</head>
+<body class="container">
+    <br/>
+    <div class="ui raised segment">
+        <a class="ui blue ribbon label">사용자 리스트(View-ejs)</a>
+        <br/><br/>
+
+        <div class="ui two column grid">
+          <% for(var i=0;i<result.length;i++){%>
+            <div class="column">
+                <div class="ui card">
+                    <div class="image">
+                      <img src="../public1/image/suzi.png">
+                    </div>
+                    <div class="content">
+                      <a class="header"><%=result[i].name%></a>
+                      <div class="meta">
+                        <span class="date">
+                          <%=moment(result[i].created).format('YYYY년 MM월 DD일')%></span>
+                      </div>
+                      <div class="description">
+                        <br/>
+                        <p>신장:170cm</p>
+                        <p>직업:가수</p>
+                      </div>
+                    </div>
+                    <div class="extra content">
+                      <a>
+                        <i class="user icon"></i>
+                        <%=i+100%> Friends
+                      </a>
+                    </div>
+                </div>
+
+            </div>
+          <%}%>
+        </div>
+    </div>
+
+
+    
+</body>
+</html>

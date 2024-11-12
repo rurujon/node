@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>범위 내의 스타벅스 찾기 테스트</title>
+</head>
+<body>
+
+    <h1>스타벅스 조회</h1>
+    <br/>
+   
+    <form action="/process/withinStarbucks" method="post">
+        <table>
+            <tr>
+                <td><label>CGV강남역</label></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label>경도</label></td>
+                <td><input type="text" name="topleft_longitude" value="127.0263"/></td>
+            </tr>
+            <tr>
+                <td><label>위도</label></td>
+                <td><input type="text" name="topleft_latitude" value="37.5017"/></td>
+            </tr>
+            <tr>
+                <td><label>역삼역 3번 출구</label></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><label>경도</label></td>
+                <td><input type="text" name="bottomright_longitude" value="127.0354"/></td>
+            </tr>
+            <tr>
+                <td><label>위도</label></td>
+                <td><input type="text" name="bottomright_latitude" value="37.5001"/></td>
+            </tr>
+        </table>
+        <input type="submit" value="추가"/>
+    </form>
+
+    <a href="/public/listStarbucks.html">전체보기</a>
+    <a href="/public/addStarbucks.html">매장 추가하기</a>
+    <a href="/public/nearStarbucks.html">가장 가까운 곳</a>
+    <a href="/public/circleStarbucks.html">반경 찾기</a>
+    <a href="/public/nearStarbucks2.html">지도 찾기 1</a>
+    
+</body>
+</html>

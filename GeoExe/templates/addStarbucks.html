@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>스타벅스 추가 테스트</title>
+</head>
+<body>
+
+    <h1>스타벅스 추가</h1>
+    <br/>
+    37.49964167890806, 127.03165928267964
+<p>스타벅스 역삼 포스코점, 서울특별시 강남구 역삼동 테헤란로 134,  
+		02-758-8631,  127.033803, 37.499645  </p>
+<p>스타벅스 GS타워점,  서울특별시 강남구 역삼동 논현로 508, 
+		02-758-8129,  127.037086, 37.501936  </p>
+<p>스타벅스 역삼점,  서울특별시 강남구 역삼동 646-14,  
+		02-758-8129,  127.035235, 37.500770  </p>
+<p>스타벅스 아크플레이스점,  서울특별시 강남구 역삼동 테헤란로 142,  
+		02-758-8158,  127.034785, 37.499717  </p>
+<p>스타벅스 강남R점, 서울특별시 강남구 역삼동 강남대로 390, 
+		02-561-3478, 127.028586, 37.498022    </p>
+<p>스타벅스 삼성교점, 서울특별시 강남구 영동대로86길 12 동남유화빌딩,
+		02-758-8592, 127.0652052, 37.5078076   </p>
+<p>스타벅스 삼성역섬유센터R점, 서울특별시 강남구 테헤란로 518, 
+		02-522-3232, 127.0606, 37.5077   </p>
+<p>스타벅스 국기원사거리점, 서울특별시 강남구 역삼동 648-22 동찬빌딩, 
+		02-568-3668, 127.031633, 37.499726</p>
+
+    <br/>
+    <form action="/process/addStarbucks" method="post">
+        <table>
+            <tr>
+                <td><label>이름</label></td>
+                <td><input type="text" name="name"/></td>
+            </tr>
+            <tr>
+                <td><label>주소</label></td>
+                <td><input type="text" name="addr"/></td>
+            </tr>
+            <tr>
+                <td><label>전화번호</label></td>
+                <td><input type="text" name="tel"/></td>
+            </tr>
+            <tr>
+                <td><label>경도</label></td>
+                <td><input type="text" name="longitude"/></td>
+            </tr>
+            <tr>
+                <td><label>위도</label></td>
+                <td><input type="text" name="latitude"/></td>
+            </tr>
+        </table>
+        <input type="submit" value="추가"/>
+    </form>
+
+    <a href="/public/listStarbucks.html">전체보기</a>
+    <a href="/public/nearStarbucks.html">가장 가까운 매장 찾기</a>
+    <a href="/public/withinStarbucks.html">범위 찾기</a>
+    <a href="/public/circleStarbucks.html">반경 찾기</a>
+    <a href="/public/nearStarbucks2.html">지도 찾기 1</a>
+    
+</body>
+</html>

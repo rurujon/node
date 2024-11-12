@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>반경 내 스타벅스 찾기 테스트</title>
+</head>
+<body>
+
+    <h1>반경 내 스타벅스 조회</h1>
+    <br/>
+    <p>역삼역 8번 출구에서 반경으로 찾기</p>
+    <form action="/process/circleStarbucks" method="post">
+        <table>
+            <tr>
+                <td><label>중심점 경도</label></td>
+                <td><input type="text" name="center_longitude" value="127.0372"/></td>
+            </tr>
+            <tr>
+                <td><label>중심점 위도</label></td>
+                <td><input type="text" name="center_latitude" value="37.5011"/></td>
+            </tr>
+            <tr>
+                <td><label>반경</label></td>
+                <td><input type="text" name="radius"/>m</td>
+            </tr>
+        </table>
+        <input type="submit" value="추가"/>
+    </form>
+
+    <a href="/public/listStarbucks.html">전체보기</a>
+    <a href="/public/addStarbucks.html">매장 추가하기</a>
+    <a href="/public/withinStarbucks.html">범위 찾기</a>
+    <a href="/public/nearStarbucks.html">가장 가까운 매장 찾기</a>
+    <a href="/public/nearStarbucks2.html">지도 찾기 1</a>
+    
+</body>
+</html>

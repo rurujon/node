@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link rel="stylesheet" type="text/css" href="./data/semantic.min.css"/>
+    <link rel="stylesheet" type="text/css" href="./data/chatClient.css"/>
+
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="./data/semantic.min.js"></script>
+    <script type="text/javascript" src="https://cdn.socket.io/4.7.4/socket.io.js"></script>
+
+    <script type="text/javascript">
+
+        var host
+        var port
+        var socket
+        
+        $(function(){
+
+            $('#connectBtn').bind('click',function(event){
+                
+                host = $('#host').val()
+                port = $('#port').val()
+
+                connectToServer()
+            })
+
+            //1.메세지를 보내는 코딩(emit 메서드)
+            $('#sendBtn').bind('click',function(event){
+                
+
+            var sender = $('#senderId').val()
+            var receiver = $('#receiverId').val()
+            var msg = $('#msg').val()
+
+            //message이벤트 객체 포멧은 사용자 정의
+            //sender : 보내는사람 아이디
+            //receiver : 받는사람 아이디
+            //command : 데이터의 종류를 구별(채팅글자외 다른기능)
+            //type : 전송될 데이터의 형태
+            //data : 데이터
+
+            var output = {sender:sender,receiver:receiver,
+                command:'chat',type:'text',data:msg
+            }
+
+            if(socket==undefined){
+
+                alert('서버에 연결되어 있지 않습니다. 서버에 연결하세요.')
+                return
+            }
+
+            //메세지 전송
+            socket.emit('message',output)
+
+            addToDiscussion('self',msg)
+
+            $('#msg').val('')
+            $('#msg').focus('')
+
+            })
+
+            $('#loginBtn').bind('click',function(event){
+
+                var id = $('#id').val()
+                var pwd = $('#pwd').val()
+                var alias = $('#alias').val()
+                var today = $('#today').val()
+
+                $('#senderId').val(id)
+
+                var output = {id:id,pwd:pwd,alias:alias,today:today}
+
+                if(socket==undefined){
+                    alert('서버에 연결되어 있지 않습니다.')
+                    return
+                }
+
+                socket.emit('login',output)
+
+            })
+
+            $('#logoutBtn').bind('click',function(event){
+
+                if(socket==undefined){
+                    alert('서버에 연결되어 있지 않습니다.')
+                    return
+                }
+
+                var id = $('#id').val()
+
+                var output = {id:id}
+
+                socket.emit('logout',output)
+
+                $('#id').val('')
+                $('#pwd').val('')
+                $('#alias').val('')
+                $('#today').val('')
+
+                $('#senderId').val('')
+                
+            })
+
+            $('#clearBtn').bind('click',function(event){
+                $('#msg').val('')
+            })
+
+
+        })
+
+        
+
+        function connectToServer(){
+
+            host = $('#host').val()
+            port = $('#port').val()
+
+            var options ={'forceNew':true} //연결 세션 만들기
+            var url = 'http://' + host + ':' + port
+
+            socket = io.connect(url,options)
+
+            socket.on('connect',function(){
+                alert('웹 소켓 서버가 연결되었습니다.' + url)
+
+                //3. 서버에서 온 데이터 받음
+                socket.on('message',function(message){
+                    
+                    addToDiscussion('other',message.data)
+                })
+
+                socket.on('response',function(response){
+
+                    
+                    if(response.code==444){
+                        socket.close()
+                    }
+                })
+            })
+
+            socket.on('disconnect',function(){
+                alert('웹 소켓 서버가 종료되었습니다.' + url)
+            })
+
+        }
+
+        function showClock(date){
+
+            var year = date.getFullYear()
+
+            var month = (date.getMonth()+1)
+            month = month>=10?month:'0'+month
+            
+            var day = (date.getDate())
+            day = day>=10?day:'0'+day
+
+            var h = (date.getHours())
+            hh = h>=10?h:'0'+h
+
+            var m = (date.getMinutes())
+            mm = m>=10?m:'0'+m
+
+            var s = (date.getSeconds())
+            ss = s>=10?s:'0'+s
+
+            return year + "-" + month + "-" + day + " " + 
+                hh + ":" + mm + ":" + ss
+        }
+
+
+        function addToDiscussion(writer,msg){
+
+            var img = './image/suzi.png'
+
+            if(writer=='other'){
+                img ='./image/inna.png'
+            }
+
+            var contents = "<li class='" + writer + "'>"
+                        + "<div class ='avatar'>"
+                        + "<img src='" + img + "'/>"
+                        + "</div>"
+                        + "<div class='message'>"
+                        + "<p>" + msg + "</p>"
+                        + "<time datetime='" + showClock(new Date()) + "'>"
+                        + showClock(new Date()) + "</time>"
+                        + "</div></li>"
+            
+            $('.discussion').prepend(contents)  //append(아래로 출력)
+
+        }
+
+        
+
+    </script>
+</head>
+<body onload="connectToServer()">
+
+<div class="container">
+    <div id="cardbox" class="ui blue fluid card">
+
+        <!-- ********************************************************* -->
+        <h4 class="ui horizontal divider header">메세지</h4>
+        <div class="ui segment" id="result">
+            <ol class="discussion">
+               
+            </ol>
+        </div>
+
+
+
+        <!-- ********************************************************* -->
+
+        <div class="content">
+            <div class="left floated author">
+                <img id="iconImage" class="ui avatar image"
+                src="./image/author.png"/>
+
+            </div>
+            <div>
+                <div id="titleText" class="header">일대일 채팅</div>
+                <div id="contentsText" class="description">
+                    연결 및 로그인 후 메세지를 보내세요
+                </div>
+            </div>
+        </div>
+
+        <!-- 연결하기 -->
+        <div>
+            <div class="ui input">
+                <input type="text" id="host" value="192.168.16.24"/>
+            </div>
+            <div class="ui input">
+            <input type="text" id="port" value="3000"/>
+            </div>
+            <div class="ui input">
+            <input type="button" class="ui primary button" id="connectBtn" value="연결하기"/>
+            </div>
+        </div>
+
+        <br/>
+
+        <!-- 로그인/로그아웃 -->
+
+        <div>
+            <div class="ui input">
+                아이디 : <input type="text" id="id"/><br/>
+            </div>
+            <div class="ui input">
+                패스워드 : <input type="password" id="pwd"/><br/>
+            </div>
+            <div class="ui input">
+                별명 : <input type="text" id="alias"/><br/>
+            </div>
+            <div class="ui input">
+                상태 : <input type="text" id="today"/><br/>
+            </div>
+            <br/>
+            <input type="button" class="ui primary button" id="loginBtn" value="로그인"/>
+            <input type="button" class="ui primary button" id="logoutBtn" value="로그아웃"/>
+        </div>
+        <br/>
+
+        <!-- 전송 -->
+        <div>
+            <div class="description">
+                <label>보내는 사람 아이디 : </label>
+                <div class="ui input">
+                    <input type="text" id="senderId"/>
+                </div>
+            </div>
+            <div>
+                <label>받는 사람 아이디 : </label>
+                <div class="ui input">
+                    <input type="text" id="receiverId" value="ALL"/>
+                </div>
+            </div>
+            <div>
+                <label>메세지 데이터 : </label>
+                <div class="ui input">
+                    <input type="text" id="msg"/>
+                </div>
+            </div>
+            <br/>
+            <input type="button" class="ui primary button" id="sendBtn" value="전송"/>
+            <input type="button" class="ui primary button" id="clearBtn" value="지우기"/>
+        </div>
+
+        
+    </div>
+</div>
+</body>
+</html>

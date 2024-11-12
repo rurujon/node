@@ -1,0 +1,35 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(name='viewport' content='width=device-width, initial-scale=1.0')
+    title 사용자 리스트 목록
+    link(rel='stylesheet' type='text/css' href='../public1/data/semantic.min.css')
+    link(rel='stylesheet' type='text/css' href='../public1//data/listUserResp.css')
+    script(src='https://code.jquery.com/jquery-3.1.1.min.js')
+    script(src='../public1/data/semantic.min.js')
+  body.container
+    br
+    .ui.raised.segment
+      a.ui.blue.ribbon.label 사용자 리스트(View-jade)
+      br
+      br
+      .ui.two.column.grid
+        - for(var i=0;i<result.length;i++)
+          .column
+            .ui.card
+              .image
+                img(src='../public1/image/suzi.png')
+              .content
+                a.header #{result[i].name}
+                .meta
+                  span.date
+                    | #{moment(result[i].created).format('YYYY년 MM월 DD일')}
+                .description
+                  br
+                  p 신장:170cm
+                  p 직업:가수
+              .extra.content
+                a
+                  i.user.icon
+                  | #{i+100} Friends
